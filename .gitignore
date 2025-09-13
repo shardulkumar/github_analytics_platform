@@ -16,3 +16,6 @@ poetry.lock
 __pycache__/
 *.py[codz]
 *$py.class
+
+# data files
+data/

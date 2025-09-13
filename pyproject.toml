@@ -4,6 +4,7 @@ version = "0.1.0"
 description = "A real-time analytics platform for the GitHub universe using PySpark."
 authors = ["shardulkumar@live.in"]
 readme = "README.md"
+packages = [{include = "src"}]
 
 [tool.poetry.dependencies]
 python = "^3.12"
