@@ -25,7 +25,7 @@ def main():
     args = parser.parse_args()
 
     # Spark initialization
-    spark = get_spark_session(env=args.env, app_name=f"github-analyics-{args.job}")
+    spark = get_spark_session(env=args.env, app_name=f"github-analytics-{args.job}")
 
     # Job execution
     if args.job == "exploration":
