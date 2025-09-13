@@ -1,6 +1,6 @@
 import argparse
 from utils.spark import get_spark_session
-from jobs import exploration
+from jobs import exploration, batch_job
 
 
 def main():
@@ -12,7 +12,7 @@ def main():
     parser.add_argument(
         "--job",
         required=True,
-        choices=["exploration"],
+        choices=["exploration", "batch"],
         help="The name of the job to run."
     )
     parser.add_argument(
@@ -22,6 +22,11 @@ def main():
         choices=["dev", "prod"],
         help="The environment to run the job in."
     )
+
+    # Arguments for data paths
+    parser.add_argument("--data-path", help="Path to the input data")
+    parser.add_argument("--output-path", help="Path to write the output")
+
     args = parser.parse_args()
 
     # Spark initialization
@@ -31,6 +36,11 @@ def main():
     if args.job == "exploration":
         print(f"Running '{args.job}' job in '{args.env}' environment...")
         exploration.run(spark)
+    elif args.job == "batch":
+        if not args.data_path or not args.output_path:
+            raise ValueError("--data-path and --output-path are required for the batch job")
+        print(f"Running '{args.job}' job in '{args.env}' environment...")
+        batch_job.run(spark, args.data_path, args.output_path)
     else:
         raise ValueError(f"Job {args.job} is not a valid job.")
     # Stop SparkSession
