@@ -4,8 +4,13 @@
 # Environments
 .env
 .envrc
-.venv
-.idea
+# Poetry
+.venv/
+poetry.lock
+
+# IDE
+.idea/
+.vscode/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

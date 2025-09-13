@@ -1,0 +1,4 @@
+spark:
+  spark.master: "local[*]"
+  spark.driver.memory: "2g"
+  spark.shuffle.partition: 4

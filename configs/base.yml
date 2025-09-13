@@ -1,0 +1,2 @@
+spark:
+  spark.sql.sources.partitionOverwriteMode: dynamic
