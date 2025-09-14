@@ -13,14 +13,14 @@ def main():
         "--job",
         required=True,
         choices=["exploration", "batch"],
-        help="The name of the job to run."
+        help="The name of the job to run.",
     )
     parser.add_argument(
         "--env",
         required=False,
         default="dev",
         choices=["dev", "prod"],
-        help="The environment to run the job in."
+        help="The environment to run the job in.",
     )
 
     # Arguments for data paths
@@ -38,11 +38,16 @@ def main():
         exploration.run(spark)
     elif args.job == "batch":
         if not args.data_path or not args.output_path:
-            raise ValueError("--data-path and --output-path are required for the batch job")
+            raise ValueError(
+                "--data-path and --output-path are required for the batch job"
+            )
         print(f"Running '{args.job}' job in '{args.env}' environment...")
         batch_job.run(spark, args.data_path, args.output_path)
     else:
         raise ValueError(f"Job {args.job} is not a valid job.")
+
+    # Adding an "intentional pause" to inspect Spark UI; History server to be enabled later.
+    input("Press 'ENTER' to stop spark application and exit.")
     # Stop SparkSession
     spark.stop()
     print("Job finished successfully.")
