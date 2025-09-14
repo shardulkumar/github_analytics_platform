@@ -30,7 +30,7 @@ def run(spark: SparkSession, data_path: str, output_path: str):
         col("repo.id").alias("repo_id"),
         col("repo.name").alias("repo_name"),
         col("payload.action").alias("payload_action"),
-        col("payload.pull_request.merged").alias("is_merged")
+        col("payload.pull_request.merged").alias("is_merged"),
     )
 
     # 2. Create the dimension tables
@@ -42,17 +42,20 @@ def run(spark: SparkSession, data_path: str, output_path: str):
     dim_repositories = events_df.select("repo_id", "repo_name").distinct()
 
     # dim_dates: date and time components extracted from the event timestamp
-    dim_dates = events_df.select("created_at").distinct().withColumn("event_date", col("created_at").cast("date")).withColumn("year", year(col("created_at"))).withColumn("month", month(col("created_at"))).withColumn("day", dayofmonth(col("created_at"))).withColumn("hour", hour(col("created_at")))
+    dim_dates = (
+        events_df.select("created_at")
+        .distinct()
+        .withColumn("event_date", col("created_at").cast("date"))
+        .withColumn("year", year(col("created_at")))
+        .withColumn("month", month(col("created_at")))
+        .withColumn("day", dayofmonth(col("created_at")))
+        .withColumn("hour", hour(col("created_at")))
+    )
 
     # 3. Create the fact table
     # The fact table contains the event measurements and foreign keys to the dimensions
     fact_events = events_df.select(
-        "event_id",
-        "created_at",
-        "event_type",
-        "actor_id",
-        "repo_id",
-        "is_merged"
+        "event_id", "created_at", "event_type", "actor_id", "repo_id", "is_merged"
     )
 
     # Output to parquet
